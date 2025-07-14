@@ -12,11 +12,17 @@ void initial_setup() {
   pinMode(Enable, OUTPUT);
 
   // --------- Inisiasi Encoder Motor ------------
-  pinMode(AmotorENC, INPUT_PULLUP);
-  pinMode(BmotorENC, INPUT_PULLUP);
-  pinMode(CmotorENC, INPUT_PULLUP);
-  pinMode(DmotorENC, INPUT_PULLUP);
+  pinMode(AmotorENC, INPUT);
+  pinMode(BmotorENC, INPUT);
+  pinMode(CmotorENC, INPUT);
+  pinMode(DmotorENC, INPUT);
 
+  pinMode(Encoder1A, INPUT_PULLUP);
+  pinMode(Encoder1B, INPUT_PULLUP);
+  pinMode(Encoder2A, INPUT_PULLUP);
+  pinMode(Encoder2B, INPUT_PULLUP);
+  pinMode(Encoder3A, INPUT_PULLUP);
+  pinMode(Encoder3B, INPUT_PULLUP);
   pinMode(PD14, OUTPUT);  // LED BUILTIN, buat debug Encoder motor
 
   // ---------- Interupt ----------
@@ -24,6 +30,10 @@ void initial_setup() {
   attachInterrupt(digitalPinToInterrupt(BmotorENC), ISR_encoder2, RISING);
   attachInterrupt(digitalPinToInterrupt(CmotorENC), ISR_encoder3, RISING);
   attachInterrupt(digitalPinToInterrupt(DmotorENC), ISR_encoder4, RISING);
+
+  attachInterrupt(digitalPinToInterrupt(Encoder1A), encA, RISING);
+  attachInterrupt(digitalPinToInterrupt(Encoder2A), encB, RISING);
+  attachInterrupt(digitalPinToInterrupt(Encoder3A), encC, RISING);
 
   inisiasi_timer();
 }
@@ -40,18 +50,28 @@ void ISR_encoder3() {
 void ISR_encoder4() {
   encoderMotor4++;
 }
+
+void encA() {
+  (digitalRead(Encoder1A) == digitalRead(Encoder1B)) ? Odometry1-- : Odometry1++;
+}
+void encB() {
+  (digitalRead(Encoder2A) == digitalRead(Encoder2B)) ? Odometry2++ : Odometry2--;
+}
+void encC() {
+  (digitalRead(Encoder3A) == digitalRead(Encoder3B)) ? Odometry3++ : Odometry3--;
+}
 //===========================================================
 
 void inisiasi_timer() {
-  // Kalau pake STM32F4 tidak perlu diubah
-  #if defined(TIM5)
-    TIM_TypeDef *Instance = TIM5;
-  #else
-    TIM_TypeDef *Instance = TIM5;
-  #endif
+// Kalau pake STM32F4 tidak perlu diubah
+#if defined(TIM5)
+  TIM_TypeDef *Instance = TIM5;
+#else
+  TIM_TypeDef *Instance = TIM5;
+#endif
 
   HardwareTimer *MyTim = new HardwareTimer(Instance);
-  MyTim->setOverflow(10, HERTZ_FORMAT); // 10 Hz (100 ms)
+  MyTim->setOverflow(10, HERTZ_FORMAT);  // 10 Hz (100 ms)
   MyTim->attachInterrupt(updateoverflow);
   MyTim->resume();
 }

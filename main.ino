@@ -1,18 +1,19 @@
 void setup() {
   initial_setup();
+  
 }
 
 void loop() {
   // =========== Gerakan XYZ ============
   float x = 0;
-  float y = 0;
-  float z = 1;
+  float y = 2;
+  float z = 0;
   holonomic(x, y, -z);
-  Serial.print(encoderMotor1);
-  Serial.print("  ");
-  Serial.print(encoderMotor2);
-  Serial.print("  ");
-  Serial.print(encoderMotor3);
-  Serial.print("  ");
-  Serial.println(encoderMotor4);
+  // Serial.print(Odometry1);
+  // Serial.print("  ");
+  // Serial.print(Odometry2);
+  // Serial.print("  ");
+  // Serial.print(Odometry3);
+  // Serial.print("  ");
+  // Serial.println("");
 }

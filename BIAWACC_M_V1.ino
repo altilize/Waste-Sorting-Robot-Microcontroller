@@ -38,7 +38,7 @@
 
 // ============== Encoder Motor ============== //
 #define AmotorENC PC7
-#define BmotorENC PD13 
+#define BmotorENC PD13
 #define CmotorENC PD12
 #define DmotorENC PC6
 volatile int encoderMotor1 = 0, encoderMotor2 = 0, encoderMotor3 = 0, encoderMotor4 = 0;
@@ -60,15 +60,12 @@ float SpeedA = 0, SpeedB = 0, SpeedC = 0, SpeedD = 0;
 #define Encoder3B PD9
 volatile int Odometry1 = 0, Odometry2 = 0, Odometry3 = 0;
 
-// ============ Line Follower ================== //
+// ============ Multiplexer ================== //
 const int MUX_Selektor_0 = PC0;
 const int MUX_Selektor_1 = PC1;
 const int MUX_Selektor_2 = PC2;
 const int MUX_Selektor_3 = PC3;
 const int MUX_INPUT = PA4;
-
-volatile int LF_Vertikal[8];
-float weights[] = { 0.3, 0.2, 0.1, 0, -0.1, -0.2, -0.3 };
 
 // ------- Fungsi untuk membaca Mux (0-15) --------
 void MUX_Select(int port) {
@@ -79,4 +76,14 @@ void MUX_Select(int port) {
   digitalWrite(MUX_Selektor_2, (port >> 2) & 1);
   digitalWrite(MUX_Selektor_3, (port >> 3) & 1);
 }
+// ------------- Line Follower ---------------------
+volatile int LF_Vertikal[8];
+float weights[] = { 0.3, 0.2, 0.1, 0, -0.1, -0.2, -0.3 };
 
+
+// ============== Variabel Lidar =================== //
+#include <VL53L1X.h>
+
+const uint8_t xshutPins[4] = { PB5, PB3, PD6, PD4 };
+VL53L1X lidar[4];
+double readLidar[4];

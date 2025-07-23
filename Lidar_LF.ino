@@ -1,3 +1,4 @@
+// ======================== LINE FOLLOWER ======================
 void LF_Read() {
   MUX_Select(0);
   delayMicroseconds(20);
@@ -101,4 +102,26 @@ void Debug_LF_Vertikal() {
   Serial.print(LF_Vertikal[7]);
   Serial.print("  | Output : ");
   Serial.println(WA);
+}
+
+
+// ======================= LIDAR ========================== //
+void Lidar_Read() {
+  readLidar[0] = lidar[0].read();
+  readLidar[1] = lidar[1].read();
+  readLidar[2] = lidar[2].read();
+  readLidar[3] = lidar[3].read();
+}
+
+void Debug_Lidar() {
+  Lidar_Read();
+
+  Serial.print(readLidar[0]);
+  Serial.print(" ");
+  Serial.print(readLidar[1]);
+  Serial.print(" ");
+  Serial.print(readLidar[2]);
+  Serial.print(" ");
+  Serial.print(readLidar[3]);
+  Serial.println(" ");
 }

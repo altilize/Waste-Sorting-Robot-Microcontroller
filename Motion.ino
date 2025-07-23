@@ -12,54 +12,18 @@ void holonomic(float vx, float vy, float vz) {
   setpoint3 = holonomic_speedC * maxRPM;
   setpoint4 = holonomic_speedD * maxRPM;
 
-  if (setpoint1 < 0) {
-    setpoint1 *= -1;
-    flagPID1 = true;
-  } else if (setpoint1 > 0) {
-    flagPID1 = false;
-  } else if (setpoint1 == 0) {
-    setpoint1 = 0;
-  }
+  flagPID1 = (setpoint1 < 0);
+  flagPID2 = (setpoint2 < 0);
+  flagPID3 = (setpoint3 < 0);
+  flagPID4 = (setpoint4 < 0);
 
-  if (setpoint2 < 0) {
-    setpoint2 *= -1;
-    flagPID2 = true;
-  } else if (setpoint2 > 0) {
-    flagPID2 = false;
-  } else if (setpoint2 == 0) {
-    setpoint2 = 0;
-  }
-
-  if (setpoint3 < 0) {
-    setpoint3 *= -1;
-    flagPID3 = true;
-  } else if (setpoint3 > 0) {
-    flagPID3 = false;
-  } else if (setpoint3 == 0) {
-    setpoint3 = 0;
-  }
-
-  if (setpoint4 < 0) {
-    setpoint4 *= -1;
-    flagPID4 = true;
-  } else if (setpoint4 > 0) {
-    flagPID4 = false;
-  } else if (setpoint4 == 0) {
-    setpoint4 = 0;
-  }
-  // flagPID1 = (setpoint1 < 0);
-  // flagPID2 = (setpoint2 < 0);
-  // flagPID3 = (setpoint3 < 0);
-  // flagPID4 = (setpoint4 < 0);
+  setpoint1 = abs(setpoint1);
+  setpoint2 = abs(setpoint2);
+  setpoint3 = abs(setpoint3);
+  setpoint4 = abs(setpoint4);
 
   pid();
-  // Serial.print(setpoint1);
-  // Serial.print("  ");
-  // Serial.print(setpoint2);
-  // Serial.print("  ");
-  // Serial.print(setpoint3);
-  // Serial.print("  ");
-  // Serial.println(setpoint4);
+
   Serial.print(SpeedA);
   Serial.print("  ");
   Serial.print(SpeedB);
@@ -67,19 +31,16 @@ void holonomic(float vx, float vy, float vz) {
   Serial.print(SpeedC);
   Serial.print("  ");
   Serial.println(SpeedD);
-  // -------- Mengendalikan Motor --------- //
-  controlMotor(AmotorR, AmotorL, SpeedA);
-  controlMotor(BmotorR, BmotorL, SpeedB);
-  controlMotor(CmotorR, CmotorL, SpeedC);
-  controlMotor(DmotorR, DmotorL, SpeedD);
+  
+  motorauto();
 }
+
 
 // ========= FUNGSI GERAKIN MOTOR DARI HOLONOMIC ========== //
 void controlMotor(int motorR, int motorL, float speed) {
   digitalWrite(Enable, HIGH);
 
   int pwmValue = constrain(abs(speed), 0, 255);
-  analogWriteFrequency(20000);  // biar motor ga bunyi
 
   if (speed > 0) {
     analogWrite(motorR, pwmValue);
@@ -90,5 +51,74 @@ void controlMotor(int motorR, int motorL, float speed) {
   } else {
     analogWrite(motorR, 0);
     analogWrite(motorL, 0);
+  }
+}
+
+void motorauto() {
+  digitalWrite(Enable, HIGH);
+
+  // -------- motor A ------------
+  if (SpeedA > 0) {
+    analogWrite(AmotorL, 0);
+    analogWrite(AmotorR, SpeedA);
+  } else if (SpeedA < 0) {
+    SpeedA *= -1;
+    analogWrite(AmotorL, SpeedA);
+    analogWrite(BmotorR, 0);
+  } else if (SpeedA == 0) {
+    SpeedA = 0;
+    analogWrite(AmotorL, 0);
+    analogWrite(AmotorR, 0);
+  }
+
+
+  // -------- motor B ------------
+  if (SpeedB > 0) {
+    analogWrite(BmotorL, SpeedB);
+    analogWrite(BmotorR, 0);
+  }
+
+  else if (SpeedB < 0) {
+    SpeedB *= -1;
+    analogWrite(BmotorL, 0);
+    analogWrite(BmotorR, SpeedB);
+  } else if (SpeedB == 0) {
+    SpeedB = 0;
+    analogWrite(BmotorL, 0);
+    analogWrite(BmotorR, 0);
+  }
+
+
+  // -------- motor C ------------
+  if (SpeedC > 0) {
+    analogWrite(CmotorL, 0);
+    analogWrite(CmotorR, SpeedC);
+  }
+
+  else if (SpeedC < 0) {
+    SpeedC *= -1;
+    analogWrite(CmotorL, SpeedC);
+    analogWrite(CmotorR, 0);
+  } else if (SpeedC == 0) {
+    SpeedC = 0;
+    analogWrite(CmotorL, 0);
+    analogWrite(CmotorR, 0);
+  }
+
+
+  // -------- motor D ------------
+  if (SpeedD > 0) {
+    analogWrite(DmotorL, SpeedD);
+    analogWrite(DmotorR, 0);
+  }
+
+  else if (SpeedD < 0) {
+    SpeedD *= -1;
+    analogWrite(DmotorL, 0);
+    analogWrite(DmotorR, SpeedD);
+  } else if (SpeedD == 0) {
+    SpeedD = 0;
+    analogWrite(DmotorL, 0);
+    analogWrite(DmotorR, 0);
   }
 }

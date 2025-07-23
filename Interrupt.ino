@@ -23,7 +23,6 @@ void initial_setup() {
   pinMode(Encoder2B, INPUT_PULLUP);
   pinMode(Encoder3A, INPUT_PULLUP);
   pinMode(Encoder3B, INPUT_PULLUP);
-  pinMode(PD14, OUTPUT);  // LED BUILTIN, buat debug Encoder motor
 
   // ---------- Interupt ----------
   attachInterrupt(digitalPinToInterrupt(AmotorENC), ISR_encoder1, RISING);
@@ -34,6 +33,8 @@ void initial_setup() {
   attachInterrupt(digitalPinToInterrupt(Encoder1A), encA, RISING);
   attachInterrupt(digitalPinToInterrupt(Encoder2A), encB, RISING);
   attachInterrupt(digitalPinToInterrupt(Encoder3A), encC, RISING);
+
+  analogWriteFrequency(20000);  // biar motor ga bunyi
 
   inisiasi_timer();
 }
@@ -64,14 +65,14 @@ void encC() {
 
 void inisiasi_timer() {
 // Kalau pake STM32F4 tidak perlu diubah
-#if defined(TIM5)
-  TIM_TypeDef *Instance = TIM5;
-#else
-  TIM_TypeDef *Instance = TIM5;
-#endif
+  #if defined(TIM5)
+    TIM_TypeDef *Instance = TIM5;
+  #else
+    TIM_TypeDef *Instance = TIM5;
+  #endif
 
   HardwareTimer *MyTim = new HardwareTimer(Instance);
-  MyTim->setOverflow(10, HERTZ_FORMAT);  // 10 Hz (100 ms)
+  MyTim->setOverflow(10, HERTZ_FORMAT);  // 10 Hz | 1/t = 10hz, t = 100 ms
   MyTim->attachInterrupt(updateoverflow);
   MyTim->resume();
 }
@@ -87,16 +88,20 @@ void updateoverflow() {
   encoderMotor3 = 0;
   encoderMotor4 = 0;
 
-  rpmA = (encoder1RPM * 60 * 10) / 134;  // Encoder * 60 detik/ 0.1 detik (interveal 100ms) * (ppr * rasio motor)
+  rpmA = (encoder1RPM * 60 * 10) / 134;  // Encoder * 60 detik/ 0.1 detik (interval 100ms) * (ppr * rasio motor)
   rpmB = (encoder2RPM * 60 * 10) / 134;
   rpmC = (encoder3RPM * 60 * 10) / 134;
   rpmD = (encoder4RPM * 60 * 10) / 134;
-  /*
-  Serial.print(rpmA);
-  Serial.print("|");
-  Serial.print(rpmB);
-  Serial.print("|");
-  Serial.print(rpmC);
-  Serial.println();
-  */
+
+  // pid(); kalau mau PIDnya setiap 10 Hz, harus di bagi interval di function PIDnya
+
+
+  // Serial.print(rpmA);
+  // Serial.print("|");
+  // Serial.print(rpmB);
+  // Serial.print("|");
+  // Serial.print(rpmC);
+  // Serial.print("|");
+  // Serial.print(rpmD);
+  // Serial.println();
 }

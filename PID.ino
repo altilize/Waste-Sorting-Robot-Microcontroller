@@ -7,7 +7,7 @@ float previousIA = 0, previousErrorA = 0;
 
 float KpB = 0.0001,
       KiB = 0.0,
-      KdB = 0.000;
+      KdB = 0.0;
 float errorB = 0, PIDvalueB = 0;
 float PB = 0, IB = 0, DB = 0;
 float previousIB = 0, previousErrorB = 0;
@@ -28,7 +28,7 @@ float previousID = 0, previousErrorD = 0;
 
 
 void pid() {
-  // ---------   MOTOR A ------------
+// ------------------ Motor A -------------------- //
   errorA = setpoint1 - rpmA;
 
   PA = errorA;
@@ -39,7 +39,7 @@ void pid() {
 
   PID_A += PIDvalueA;
   if (PID_A > 255) PID_A = 255;
-  else if (PID_A < 0) PID_A = 0;
+  else if (PID_A < -255) PID_A = -255;
 
   SpeedA = PID_A;
   if (flagPID1) SpeedA *= -1;
@@ -47,7 +47,7 @@ void pid() {
   previousErrorA = errorA;
   previousIA = IA;
 
-  // ---------   MOTOR B ------------
+// ------------------ Motor B -------------------- //
   errorB = setpoint2 - rpmB;
 
   PB = errorB;
@@ -58,7 +58,7 @@ void pid() {
 
   PID_B += PIDvalueB;
   if (PID_B > 255) PID_B = 255;
-  else if (PID_B < 0) PID_B = 0;
+  else if (PID_B < -255) PID_B = -255;
 
   SpeedB = PID_B;
   if (flagPID2) SpeedB *= -1;
@@ -66,7 +66,7 @@ void pid() {
   previousErrorB = errorB;
   previousIB = IB;
 
-  // ---------   MOTOR C ------------
+// ------------------ Motor C -------------------- //
   errorC = setpoint3 - rpmC;
 
   PC = errorC;
@@ -77,7 +77,7 @@ void pid() {
 
   PID_C += PIDvalueC;
   if (PID_C > 255) PID_C = 255;
-  else if (PID_C < 0) PID_C = 0;
+  else if (PID_C < -255) PID_C = -255;
 
   SpeedC = PID_C;
   if (flagPID3) SpeedC *= -1;
@@ -85,8 +85,7 @@ void pid() {
   previousErrorC = errorC;
   previousIC = IC;
 
-
-  // ---------   MOTOR D ------------
+// ------------------ Motor D -------------------- //
   errorD = setpoint4 - rpmD;
 
   PD = errorD;
@@ -97,7 +96,7 @@ void pid() {
 
   PID_D += PIDvalueD;
   if (PID_D > 255) PID_D = 255;
-  else if (PID_D < 0) PID_D = 0;
+  else if (PID_D < -255) PID_D = -255;
 
   SpeedD = PID_D;
   if (flagPID4) SpeedD *= -1;

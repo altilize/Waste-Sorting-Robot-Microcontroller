@@ -84,6 +84,6 @@ float weights[] = { 0.3, 0.2, 0.1, 0, -0.1, -0.2, -0.3 };
 // ============== Variabel Lidar =================== //
 #include <VL53L1X.h>
 
-const uint8_t xshutPins[4] = { PB5, PB3, PD6, PD4 };
-VL53L1X lidar[4];
-double readLidar[4];
+const uint8_t xshutPins[2] = { PB5, PB3 };
+VL53L1X lidar[2];
+double readLidar[2];

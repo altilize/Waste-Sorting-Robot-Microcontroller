@@ -109,8 +109,6 @@ void Debug_LF_Vertikal() {
 void Lidar_Read() {
   readLidar[0] = lidar[0].read();
   readLidar[1] = lidar[1].read();
-  readLidar[2] = lidar[2].read();
-  readLidar[3] = lidar[3].read();
 }
 
 void Debug_Lidar() {
@@ -119,9 +117,6 @@ void Debug_Lidar() {
   Serial.print(readLidar[0]);
   Serial.print(" ");
   Serial.print(readLidar[1]);
-  Serial.print(" ");
-  Serial.print(readLidar[2]);
-  Serial.print(" ");
-  Serial.print(readLidar[3]);
+
   Serial.println(" ");
 }

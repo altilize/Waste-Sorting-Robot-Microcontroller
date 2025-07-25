@@ -35,25 +35,6 @@ void holonomic(float vx, float vy, float vz) {
   motorauto();
 }
 
-
-// ========= FUNGSI GERAKIN MOTOR DARI HOLONOMIC ========== //
-void controlMotor(int motorR, int motorL, float speed) {
-  digitalWrite(Enable, HIGH);
-
-  int pwmValue = constrain(abs(speed), 0, 255);
-
-  if (speed > 0) {
-    analogWrite(motorR, pwmValue);
-    analogWrite(motorL, 0);
-  } else if (speed < 0) {
-    analogWrite(motorR, 0);
-    analogWrite(motorL, pwmValue);
-  } else {
-    analogWrite(motorR, 0);
-    analogWrite(motorL, 0);
-  }
-}
-
 void motorauto() {
   digitalWrite(Enable, HIGH);
 

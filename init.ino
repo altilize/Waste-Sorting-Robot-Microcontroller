@@ -1,9 +1,5 @@
 void initial_setup() {
-  Serial.begin(115200);
-  Wire.setSDA(PB7);
-  Wire.setSCL(PB6);
-  Wire.begin();
-  analogWriteFrequency(20000);  // biar motor ga bunyi
+// inisiasi Serial dan I2C dan analogfreq ada di main
 
   init_Motor();
   init_Encoder();
@@ -26,11 +22,11 @@ void init_Timer() {
 }
 
 void init_Lidar() {
-  for (uint8_t i = 0; i < 4; i++) { // for loop dari 0 sampai jumlah lidar (4)
+  for (uint8_t i = 0; i < 2; i++) { // for loop dari 0 sampai jumlah lidar (4)
     pinMode(xshutPins[i], OUTPUT);
     digitalWrite(xshutPins[i], LOW);
   }
-  for (uint8_t i = 0; i < 4; i++) {
+  for (uint8_t i = 0; i < 2; i++) {
     pinMode(xshutPins[i], INPUT);
     delay(10);
     lidar[i].setTimeout(500);

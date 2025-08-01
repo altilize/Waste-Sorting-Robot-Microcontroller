@@ -42,18 +42,18 @@ void init_Lidar() {
 
 void init_Encoder() {
   // --------- Inisiasi Encoder Motor ------------
-  pinMode(AmotorENC, INPUT);
-  pinMode(BmotorENC, INPUT);
-  pinMode(CmotorENC, INPUT);
-  pinMode(DmotorENC, INPUT);
+  pinMode(AmotorENC, INPUT_PULLUP);
+  pinMode(BmotorENC, INPUT_PULLUP);
+  pinMode(CmotorENC, INPUT_PULLUP);
+  pinMode(DmotorENC, INPUT_PULLUP);
 
   // ------- Inisiasi Encoder Rotary -------------
-  pinMode(Encoder1A, INPUT_PULLUP);
-  pinMode(Encoder1B, INPUT_PULLUP);
-  pinMode(Encoder2A, INPUT_PULLUP);
-  pinMode(Encoder2B, INPUT_PULLUP);
-  pinMode(Encoder3A, INPUT_PULLUP);
-  pinMode(Encoder3B, INPUT_PULLUP);
+  // pinMode(Encoder1A, INPUT_PULLUP);
+  // pinMode(Encoder1B, INPUT_PULLUP);
+  // pinMode(Encoder2A, INPUT_PULLUP);
+  // pinMode(Encoder2B, INPUT_PULLUP);
+  // pinMode(Encoder3A, INPUT_PULLUP);
+  // pinMode(Encoder3B, INPUT_PULLUP);
 }
 
 void init_Motor() {
@@ -74,7 +74,7 @@ void init_Interrupt() {
   attachInterrupt(digitalPinToInterrupt(CmotorENC), ISR_encoder3, RISING);
   attachInterrupt(digitalPinToInterrupt(DmotorENC), ISR_encoder4, RISING);
 
-  attachInterrupt(digitalPinToInterrupt(Encoder1A), encA, RISING);
-  attachInterrupt(digitalPinToInterrupt(Encoder2A), encB, RISING);
-  attachInterrupt(digitalPinToInterrupt(Encoder3A), encC, RISING);
+  // attachInterrupt(digitalPinToInterrupt(Encoder1A), encA, RISING);
+  // attachInterrupt(digitalPinToInterrupt(Encoder2A), encB, RISING);
+  // attachInterrupt(digitalPinToInterrupt(Encoder3A), encC, RISING);
 }

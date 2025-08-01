@@ -1,26 +1,26 @@
 float KpA = 0.0001,
-      KiA = 0.0,
+      KiA = 0.00001,
       KdA = 0.0;
 float errorA = 0, PIDvalueA = 0;
 float PA = 0, IA = 0, DA = 0;
 float previousIA = 0, previousErrorA = 0;
 
-float KpB = 0.0001,
-      KiB = 0.0,
+float KpB = 0.00012,
+      KiB = 0.00001,
       KdB = 0.0;
 float errorB = 0, PIDvalueB = 0;
 float PB = 0, IB = 0, DB = 0;
 float previousIB = 0, previousErrorB = 0;
 
-float KpC = 0.0001,
-      KiC = 0.0,
+float KpC = 0.00012,
+      KiC = 0.00001,
       KdC = 0.0;
 float errorC = 0, PIDvalueC = 0;
 float PC = 0, IC = 0, DC = 0;
 float previousIC = 0, previousErrorC = 0;
 
 float KpD = 0.0001,
-      KiD = 0.0,
+      KiD = 0.00001,
       KdD = 0.0;
 float errorD = 0, PIDvalueD = 0;
 float PD = 0, ID = 0, DD = 0;

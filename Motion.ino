@@ -24,13 +24,13 @@ void holonomic(float vx, float vy, float vz) {
 
   pid();
 
-  Serial.print(SpeedA);
-  Serial.print("  ");
-  Serial.print(SpeedB);
-  Serial.print("  ");
-  Serial.print(SpeedC);
-  Serial.print("  ");
-  Serial.println(SpeedD);
+  // Serial.print(SpeedA);
+  // Serial.print("  ");
+  // Serial.print(SpeedB);
+  // Serial.print("  ");
+  // Serial.print(SpeedC);
+  // Serial.print("  ");
+  // Serial.println(SpeedD);
   
   motorauto();
 }

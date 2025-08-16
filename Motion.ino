@@ -23,14 +23,6 @@ void holonomic(float vx, float vy, float vz) {
   setpoint4 = abs(setpoint4);
 
   pid();
-
-  // Serial.print(SpeedA);
-  // Serial.print("  ");
-  // Serial.print(SpeedB);
-  // Serial.print("  ");
-  // Serial.print(SpeedC);
-  // Serial.print("  ");
-  // Serial.println(SpeedD);
   
   motorauto();
 }

@@ -13,6 +13,11 @@ void loop() {
   float y = 2;
   float z = 0;
   holonomic(x, y, -z);
+
+
+
+
+  // =============== BNN (Bagian Ngedebug - Ngedebug) ====================== 
   //  Debug_Lidar();
   // Serial.print(encoderMotor1);
   // Serial.print(" ");
@@ -22,11 +27,6 @@ void loop() {
   // Serial.print(" ");
   // Serial.print(encoderMotor4);
   // Serial.println(" ");
-
-  // 1 (z = 135) (-z = 135)
-  // 2 (z = 138) (-z = 269)
-  // 3 (z = 143)  (-z = 267)
-  // 4 (z = 132) (-z = 134)
 
   Serial.print(rpmA);
   Serial.print(" ");

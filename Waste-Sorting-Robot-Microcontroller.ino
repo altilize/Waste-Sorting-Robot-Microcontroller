@@ -52,12 +52,12 @@ float PID_A = 0, PID_B = 0, PID_C = 0, PID_D = 0;
 float SpeedA = 0, SpeedB = 0, SpeedC = 0, SpeedD = 0;
 
 // ============ Odometry ===================== //
-// #define Encoder1A PB10
-// #define Encoder1B PB12
-// #define Encoder2A PB11
-// #define Encoder2B PB13
-// #define Encoder3A PB15
-// #define Encoder3B PD9
+#define Encoder1A PB10
+#define Encoder1B PB12
+#define Encoder2A PB11
+#define Encoder2B PB13
+#define Encoder3A PB15
+#define Encoder3B PD9
 volatile int Odometry1 = 0, Odometry2 = 0, Odometry3 = 0;
 
 // ============ Multiplexer ================== //

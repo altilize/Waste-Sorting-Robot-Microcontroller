@@ -27,7 +27,11 @@
 
 // ---------- COBAAKK -----
 bool START = false;
+bool ser_RESET = false;
 float x = 0, y = 0, z = 0;
+
+// ============= Serial ================= //
+String command;
 
 // ============ Motor ==================== //
 #define AmotorL PA0
@@ -83,7 +87,8 @@ void MUX_Select(int port) {
 }
 // ------------- Line Follower ---------------------
 volatile int LF_Vertikal[8];
-float weights[] = { 0.3, 0.2, 0.1, 0, -0.1, -0.2, -0.3 };
+float weights[] = { 30, 20, 10, 0, -10, -20, -30 };
+bool isLF_ON = true;
 
 
 // ============== Variabel Lidar =================== //

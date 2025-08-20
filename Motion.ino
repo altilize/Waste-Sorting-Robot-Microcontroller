@@ -5,12 +5,10 @@ void holonomic(float vx, float vy, float vz) {
   float holonomic_speedC = (0.35 * vx) + (-0.35 * vy) + (0.25 * vz);
   float holonomic_speedD = (0.35 * vx) + (0.35 * vy) + (0.25 * vz);
 
-  float maxRPM = 100;
-
-  setpoint1 = holonomic_speedA * maxRPM;
-  setpoint2 = holonomic_speedB * maxRPM;
-  setpoint3 = holonomic_speedC * maxRPM;
-  setpoint4 = holonomic_speedD * maxRPM;
+  setpoint1 = holonomic_speedA;
+  setpoint2 = holonomic_speedB;
+  setpoint3 = holonomic_speedC;
+  setpoint4 = holonomic_speedD;
 
   flagPID1 = (setpoint1 < 0);
   flagPID2 = (setpoint2 < 0);

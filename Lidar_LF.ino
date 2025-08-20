@@ -104,6 +104,16 @@ void Debug_LF_Vertikal() {
   Serial.println(WA);
 }
 
+void HomeToConveyor() {
+  if (pos_y >= 0 && pos_y <= 500) {
+    x = 0;
+    y = 100;
+    z = 0;
+  } else {
+    x = 0, y = 0, z = 0;
+  }
+}
+
 
 // ======================= LIDAR ========================== //
 void Lidar_Read() {

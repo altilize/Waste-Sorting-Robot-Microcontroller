@@ -28,27 +28,27 @@
 // ---------- COBAAKK -----
 bool START = false;
 bool ser_RESET = false;
-float x = 0, y = 0, z = 0;
+int x = 0, y = 0, z = 0;
 
 // ============= Serial ================= //
 String command;
 
 // ============ Motor ==================== //
-#define AmotorL PA0
-#define AmotorR PA2
-#define BmotorR PA7  // PB1
-#define BmotorL PB1  // PA7
-#define CmotorL PA1
-#define CmotorR PA3
-#define DmotorL PB0  // PA6
-#define DmotorR PA6  // PB0
-#define Enable PB2
+#define AmotorL_PIN PA0
+#define AmotorR_PIN PA2
+#define BmotorR_PIN PA7  // PB1
+#define BmotorL_PIN PB1  // PA7
+#define CmotorL_PIN PA1
+#define CmotorR_PIN PA3
+#define DmotorL_PIN PB0  // PA6
+#define DmotorR_PIN PA6  // PB0
+#define ENABLE_MOTOR_PIN PB2
 
 // ============== Encoder Motor ==============
-#define AmotorENC PC7
-#define BmotorENC PC4  // PD13 ubah ke PC4
-#define CmotorENC PA5  // PD12 ubah ke PA5
-#define DmotorENC PC6
+#define AmotorENC_PIN PC7
+#define BmotorENC_PIN PC4  // PD13 ubah ke PC4
+#define CmotorENC_PIN PA5  // PD12 ubah ke PA5
+#define DmotorENC_PIN PC6
 volatile int encoderMotor1 = 0, encoderMotor2 = 0, encoderMotor3 = 0, encoderMotor4 = 0;
 volatile int encoder1RPM = 0, encoder2RPM = 0, encoder3RPM = 0, encoder4RPM = 0;
 
@@ -60,14 +60,28 @@ float PID_A = 0, PID_B = 0, PID_C = 0, PID_D = 0;
 float SpeedA = 0, SpeedB = 0, SpeedC = 0, SpeedD = 0;
 
 // ============ Odometry ===================== //
-#define Encoder1A PB10
-#define Encoder1B PB12
-#define Encoder2A PB11
-#define Encoder2B PB13
-#define Encoder3A PB15
-#define Encoder3B PD9
+#define ODOMETRY_PIN_1A PB10
+#define ODOMETRY_PIN_1B PB12
+#define ODOMETRY_PIN_2A PB11
+#define ODOMETRY_PIN_2B PB13
+#define ODOMETRY_PIN_3A PB15
+#define ODOMETRY_PIN_3B PD9
 volatile int Odometry1 = 0, Odometry2 = 0, Odometry3 = 0;
 int pos_x, pos_y;  // BELUM
+
+// ============= Arm ========================= //
+#define ARM_FORWARD_PIN PA10
+#define ARM_BACKWARD_PIN PE14
+#define ARM_ENCODER_A_PIN PC8
+#define ARM_ENCODER_B_PIN PA8
+#define ARM_LIMIT PE3
+int arm_target_position = 0; 
+bool arm_homed = false; 
+volatile long encoderarm_count = 0;
+
+// ============= Suction ===================== //
+#define SUCTION_PIN PD2
+bool suction_state = false;
 
 // ============ Multiplexer ================== //
 const int MUX_Selektor_0 = PC0;
@@ -87,6 +101,7 @@ void MUX_Select(int port) {
 }
 // ------------- Line Follower ---------------------
 volatile int LF_Vertikal[8];
+volatile int LF_Vertikal_Dig[8];
 float weights[] = { 30, 20, 10, 0, -10, -20, -30 };
 bool isLF_ON = true;
 
@@ -97,3 +112,12 @@ bool isLF_ON = true;
 const uint8_t xshutPins[2] = { PB5, PB3 };
 VL53L1X lidar[2];
 double readLidar[2];
+
+// =============== Variabel Compass BNO055 ========== //
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+
+Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28);
+float heading = 0;
+int robotState = 0; // 1 = maju, 2 = berputar, 3 = selesai ini buat trial lucu lucuan di mikro

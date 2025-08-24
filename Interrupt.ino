@@ -12,16 +12,26 @@ void ISR_encoder4() {
   encoderMotor4++;
 }
 
+// ============== Interrupt Encoder Arm ======================
+void ISR_encoderARM() {
+    if (digitalRead(ARM_ENCODER_A_PIN) == digitalRead(ARM_ENCODER_B_PIN)) {
+        encoderarm_count--;
+    } else {
+        encoderarm_count++;
+    }
+}
+
 // ============== Interrupt Rotary Encoder ==================
 void encA() {
-  (digitalRead(Encoder1A) == digitalRead(Encoder1B)) ? Odometry1-- : Odometry1++;
+  (digitalRead(ODOMETRY_PIN_1A) == digitalRead(ODOMETRY_PIN_1B)) ? Odometry1-- : Odometry1++;
 }
 void encB() {
-  (digitalRead(Encoder2A) == digitalRead(Encoder2B)) ? Odometry2++ : Odometry2--;
+  (digitalRead(ODOMETRY_PIN_2A) == digitalRead(ODOMETRY_PIN_2B)) ? Odometry2++ : Odometry2--;
 }
 void encC() {
-  (digitalRead(Encoder3A) == digitalRead(Encoder3B)) ? Odometry3++ : Odometry3--;
+  (digitalRead(ODOMETRY_PIN_3A) == digitalRead(ODOMETRY_PIN_3B)) ? Odometry3++ : Odometry3--;
 }
+
 
 // ============= Interrupt Timer  ============================
 void updateoverflow() {

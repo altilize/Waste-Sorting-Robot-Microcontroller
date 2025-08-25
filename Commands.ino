@@ -13,7 +13,8 @@ Command commands[] = {
   { "RAW_LF", handle_raw_lf },
   { "DIG_LF", handle_dig_lf },
   { "?", handle_query },
-  {"GO", handle_compass},
+  { "GO", handle_compass },
+  { "RESET".handle_reset },
 };
 
 void process_command(char *command) {
@@ -101,7 +102,7 @@ void handle_movement(char *args) {
 
 // ------------- Command S - Toggle Suction ------------ //
 void handle_suction(char *args) {
-  
+
   suction_state = !suction_state;
 
   if (suction_state) {
@@ -111,55 +112,54 @@ void handle_suction(char *args) {
     digitalWrite(SUCTION_PIN, LOW);
     Serial.println("Suction turned OFF");
   }
-
 }
 
 // ----------- Command R - Debug Lidar ------------------ //
 // must run Lidar_Read();
 void handle_lidar(char *args) {
-    Serial.print("L:");
-    Serial.print(readLidar[0]);
-    Serial.print(" R:");
-    Serial.println(readLidar[1]);
+  Serial.print("L:");
+  Serial.print(readLidar[0]);
+  Serial.print(" R:");
+  Serial.println(readLidar[1]);
 }
 
 // ------- Command RAW_LF - Debug LF (Analog Values) ----- //
 // must run LF_Read();
 void handle_raw_lf(char *args) {
-    // Serial.print("Hor: ");
-    // for (int i = 0; i < 8; i++) {
-    //     Serial.print(raw_sensor_horizontal[i]);
-    //     Serial.print(" ");
-    // }
-    // Serial.println();
-    Serial.print("Ver: ");
-    for (int i = 0; i < 6; i++) {
-        Serial.print(LF_Vertikal[i]);
-        Serial.print(" ");
-    }
-    Serial.println();
+  // Serial.print("Hor: ");
+  // for (int i = 0; i < 8; i++) {
+  //     Serial.print(raw_sensor_horizontal[i]);
+  //     Serial.print(" ");
+  // }
+  // Serial.println();
+  Serial.print("Ver: ");
+  for (int i = 0; i < 6; i++) {
+    Serial.print(LF_Vertikal[i]);
+    Serial.print(" ");
+  }
+  Serial.println();
 }
 
 // ------- Command DIG_LF - Debug LF (Digital Values) ------- //
 // must run LF_WeightedAverage();
 void handle_dig_lf(char *args) {
-    // Serial.println("Digital Line Follower Sensor Values:");
-    // Serial.print("Hor: ");
-    // for (int i = 0; i < 8; i++) {
-    //     Serial.print(digital_sensor_hor[i]);
-    //     Serial.print(" ");
-    // }
-    // Serial.println();
-    Serial.print("Vert: ");
-    for (int i = 0; i < 6; i++) {
-        Serial.print(LF_Vertikal_Dig[i]);
-        Serial.print(" ");
-    }
-    Serial.println();
+  // Serial.println("Digital Line Follower Sensor Values:");
+  // Serial.print("Hor: ");
+  // for (int i = 0; i < 8; i++) {
+  //     Serial.print(digital_sensor_hor[i]);
+  //     Serial.print(" ");
+  // }
+  // Serial.println();
+  Serial.print("Vert: ");
+  for (int i = 0; i < 6; i++) {
+    Serial.print(LF_Vertikal_Dig[i]);
+    Serial.print(" ");
+  }
+  Serial.println();
 }
 
 // -------- Command ? - Debug Everything (not really) -------- //
-void handle_query(char *args) { 
+void handle_query(char *args) {
   Serial.print(Odometry1);  // Rotary 1-3
   Serial.print(" ");
   Serial.print(Odometry2);
@@ -186,3 +186,20 @@ void handle_compass(char *args) {
   Serial.println(heading);
 }
 
+// ------ Command RESET - Reset Value for trial again ----------------------- //
+void handle_reset() {
+  // reset Motor
+  x = 0;
+  y = 0;
+  z = 0;
+  SpeedA = 0, SpeedB = 0, SpeedC = 0, SpeedD = 0;
+  PID_A = 0, PID_B = 0, PID_C = 0, PID_D = 0;
+  // reset Odometry
+  Odometry1 = 0;
+  Odometry2 = 0;
+  Odometry3 = 0;
+  pos_x = 0.0;
+  pos_y = 0.0;
+  // reset state robot
+  robotState = 0;
+}

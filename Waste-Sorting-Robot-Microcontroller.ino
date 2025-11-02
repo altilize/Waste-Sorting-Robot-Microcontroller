@@ -28,6 +28,7 @@
 // ---------- COBAAKK -----
 bool START = false;
 bool ser_RESET = false;
+bool kntl = false;
 int x = 0, y = 0, z = 0;
 
 // ============= Serial ================= //
@@ -36,19 +37,20 @@ String command;
 // ============ Motor ==================== //
 #define AmotorL_PIN PA0
 #define AmotorR_PIN PA2
-#define BmotorR_PIN PA7  // PB1
-#define BmotorL_PIN PB1  // PA7
-#define CmotorL_PIN PA1
-#define CmotorR_PIN PA3
-#define DmotorL_PIN PB0  // PA6
-#define DmotorR_PIN PA6  // PB0
+#define BmotorR_PIN PA3
+#define BmotorL_PIN PA1
+#define CmotorL_PIN PA6  // PA6
+#define CmotorR_PIN PB0  // PB0
+#define DmotorL_PIN PA7  // PB1
+#define DmotorR_PIN PB1  // PA7
 #define ENABLE_MOTOR_PIN PB2
 
+// #define EMERGENCY PC12
 // ============== Encoder Motor ==============
-#define AmotorENC_PIN PC7
-#define BmotorENC_PIN PC4  // PD13 ubah ke PC4
-#define CmotorENC_PIN PA5  // PD12 ubah ke PA5
-#define DmotorENC_PIN PC6
+#define BmotorENC_PIN PA5  // PD12 ubah ke PA5
+#define AmotorENC_PIN PC6
+#define CmotorENC_PIN PC4  // PD13 ubah ke PC4
+#define DmotorENC_PIN PC7
 volatile int encoderMotor1 = 0, encoderMotor2 = 0, encoderMotor3 = 0, encoderMotor4 = 0;
 volatile int encoder1RPM = 0, encoder2RPM = 0, encoder3RPM = 0, encoder4RPM = 0;
 
@@ -60,12 +62,12 @@ float PID_A = 0, PID_B = 0, PID_C = 0, PID_D = 0;
 float SpeedA = 0, SpeedB = 0, SpeedC = 0, SpeedD = 0;
 
 // ============ Odometry ===================== //
-#define ODOMETRY_PIN_1A PB10
-#define ODOMETRY_PIN_1B PB12
+#define ODOMETRY_PIN_1B PB10
+#define ODOMETRY_PIN_1A PB12
 #define ODOMETRY_PIN_2A PB11
 #define ODOMETRY_PIN_2B PB13
-#define ODOMETRY_PIN_3A PB15
-#define ODOMETRY_PIN_3B PD9
+#define ODOMETRY_PIN_3B PB15
+#define ODOMETRY_PIN_3A PD9
 volatile int Odometry1 = 0, Odometry2 = 0, Odometry3 = 0;
 int pos_x, pos_y;  // BELUM
 
@@ -75,8 +77,8 @@ int pos_x, pos_y;  // BELUM
 #define ARM_ENCODER_A_PIN PC8
 #define ARM_ENCODER_B_PIN PA8
 #define ARM_LIMIT PE3
-int arm_target_position = 0; 
-bool arm_homed = false; 
+int arm_target_position = 0;
+bool arm_homed = false;
 volatile long encoderarm_count = 0;
 
 // ============= Suction ===================== //
@@ -120,4 +122,12 @@ double readLidar[2];
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28);
 float heading = 0;
-int robotState = 0; // 1 = maju, 2 = berputar, 3 = selesai ini buat trial lucu lucuan di mikro
+int robotState = 0;  // 1 = maju, 2 = berputar, 3 = selesai ini buat trial lucu lucuan di mikro
+float headingOffset = 0.0;
+
+
+// ==================== Limit Switch =======================
+const int LimitSwitch_1 = PE3;
+const int LimitSwitch_2 = PE5;
+const int LimitSwitch_3 = PE1;
+const int BUTTON = PE6;

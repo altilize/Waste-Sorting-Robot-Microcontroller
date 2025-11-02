@@ -7,7 +7,13 @@ void read_compass() {
   sensors_event_t orientationData;
   bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
 
-  heading = orientationData.orientation.x;
-  if (heading < 0) heading += 360;
-  if (heading > 180) heading -= 360;
+  float absoluteHeading = orientationData.orientation.x;
+  
+  heading = absoluteHeading - headingOffset;
+  
+  if (heading > 180) {
+    heading -= 360;
+  } else if (heading < -180) {
+    heading += 360;
+  }
 }

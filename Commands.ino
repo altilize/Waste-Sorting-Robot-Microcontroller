@@ -14,7 +14,8 @@ Command commands[] = {
   { "DIG_LF", handle_dig_lf },
   { "?", handle_query },
   { "GO", handle_compass },
-  { "RESET".handle_reset },
+  { "RES",handle_reset },
+  {"KNTL", handle_kntl},
 };
 
 void process_command(char *command) {
@@ -82,8 +83,8 @@ void handle_movement(char *args) {
   int parsedVx, parsedVy, parsedVw;
 
   if (sscanf(args, "%d %d %d", &parsedVx, &parsedVy, &parsedVw) == 3) {
-    x = parsedVy;
-    y = parsedVx;
+    x = parsedVx;
+    y = parsedVy;
     z = parsedVw;
 
     // Debugging: Print the parsed values
@@ -94,7 +95,7 @@ void handle_movement(char *args) {
     Serial.print(", vw: ");
     Serial.println(z);
 
-    holonomic(x, y, z);
+    // holonomic(x, y, z);
   } else {
     Serial.println("Invalid command format. Use: M vx vy vw");
   }
@@ -160,24 +161,24 @@ void handle_dig_lf(char *args) {
 
 // -------- Command ? - Debug Everything (not really) -------- //
 void handle_query(char *args) {
-  Serial.print(Odometry1);  // Rotary 1-3
-  Serial.print(" ");
-  Serial.print(Odometry2);
-  Serial.print(" ");
-  Serial.print(Odometry3);
-  Serial.print("  ");
-  Serial.print(encoder1RPM);  // Encoder Motor 1-4
-  Serial.print(" ");
-  Serial.print(encoder2RPM);
-  Serial.print(" ");
-  Serial.print(encoder3RPM);
-  Serial.print(" ");
-  Serial.print(encoder4RPM);
-  Serial.print("  ");
-  Serial.print(pos_x);
-  Serial.print(" ");
-  Serial.print(pos_y);
-  Serial.println(" ");  // nanti kalo dah ada kompas tambahin thetanya juga
+  // Siapkan buffer untuk menampung seluruh string data
+  char data_buffer[100]; 
+
+  // Format seluruh data ke dalam satu string menggunakan sprintf
+  sprintf(data_buffer, "%ld %ld %ld %d %d %d %d %.2f %.2f %.2f",
+          Odometry1,
+          Odometry2,
+          Odometry3,
+          (int)encoder1RPM,
+          (int)encoder2RPM,
+          (int)encoder3RPM,
+          (int)encoder4RPM,
+          pos_x,
+          pos_y,
+          heading);
+
+  // Kirim seluruh string sekali jalan dengan newline di akhir
+  Serial.println(data_buffer);
 }
 
 // ------- Command GO - Run Home to Conveyor + print value initial compass ---- //
@@ -186,8 +187,8 @@ void handle_compass(char *args) {
   Serial.println(heading);
 }
 
-// ------ Command RESET - Reset Value for trial again ----------------------- //
-void handle_reset() {
+// ------ Command RES - Reset Value for trial again ----------------------- //
+void handle_reset(char *args) {
   // reset Motor
   x = 0;
   y = 0;
@@ -202,4 +203,15 @@ void handle_reset() {
   pos_y = 0.0;
   // reset state robot
   robotState = 0;
+  // reset compass
+  sensors_event_t orientationData;
+  bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
+
+  headingOffset = orientationData.orientation.x;
+
+  Serial.println("SUDAH RESET!");
+}
+
+void handle_kntl(char *args) {
+  kntl = !kntl;
 }

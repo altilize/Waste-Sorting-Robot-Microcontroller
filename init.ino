@@ -8,6 +8,14 @@ void initial_setup() {
   init_Lidar();
   init_Timer();
   init_Compass();
+  init_limitSwitch(); // baru nih
+}
+
+void init_limitSwitch() {
+  pinMode(LimitSwitch_1, INPUT_PULLUP);
+  pinMode(LimitSwitch_2, INPUT_PULLUP);
+  pinMode(LimitSwitch_3, INPUT_PULLUP);
+  pinMode(BUTTON, INPUT_PULLUP);
 }
 
 void init_Timer() {
@@ -77,9 +85,9 @@ void init_Motor() {
   pinMode(DmotorL_PIN, OUTPUT);
   pinMode(ENABLE_MOTOR_PIN, OUTPUT);
 
-  pinMode(ARM_FORWARD_PIN, OUTPUT);
-  pinMode(ARM_BACKWARD_PIN, OUTPUT);
-  pinMode(ARM_LIMIT, INPUT);
+  // pinMode(ARM_FORWARD_PIN, OUTPUT);
+  // pinMode(ARM_BACKWARD_PIN, OUTPUT);
+  // pinMode(ARM_LIMIT, INPUT);
 }
 
 void init_Interrupt() {

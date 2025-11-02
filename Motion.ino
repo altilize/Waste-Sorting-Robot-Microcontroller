@@ -1,14 +1,23 @@
-// ======================= Holonomic Function ================ // 
+// ======================= Holonomic Function ================ //
 void holonomic(float vx, float vy, float vz) {
+
+
+
   float holonomic_speedA = (-0.35 * vx) + (0.35 * vy) + (0.25 * vz);
   float holonomic_speedB = (-0.35 * vx) + (-0.35 * vy) + (0.25 * vz);
   float holonomic_speedC = (0.35 * vx) + (-0.35 * vy) + (0.25 * vz);
   float holonomic_speedD = (0.35 * vx) + (0.35 * vy) + (0.25 * vz);
 
-  setpoint1 = holonomic_speedA;
-  setpoint2 = holonomic_speedB;
-  setpoint3 = holonomic_speedC;
-  setpoint4 = holonomic_speedD;
+  setpoint1 = holonomic_speedA * 10;
+  setpoint2 = holonomic_speedB * 10;
+  setpoint3 = holonomic_speedC * 10;
+  setpoint4 = holonomic_speedD * 10;
+
+  // SpeedA = holonomic_speedA;
+  // SpeedB = holonomic_speedB;
+  // SpeedC = holonomic_speedC;
+  // SpeedD = holonomic_speedD;
+
 
   flagPID1 = (setpoint1 < 0);
   flagPID2 = (setpoint2 < 0);
@@ -20,111 +29,88 @@ void holonomic(float vx, float vy, float vz) {
   setpoint3 = abs(setpoint3);
   setpoint4 = abs(setpoint4);
 
-  pid();
-  
+  // pid ada di updateoverflow(); 10hz
+  // pid();
+
   motorauto();
 }
 
 void motorauto() {
   digitalWrite(ENABLE_MOTOR_PIN, HIGH);
 
-  // -------- motor A ------------
-  if (SpeedA > 0) {
-    analogWrite(AmotorL_PIN, 0);
-    analogWrite(AmotorR_PIN, SpeedA);
-  } else if (SpeedA < 0) {
-    SpeedA *= -1;
-    analogWrite(AmotorL_PIN, SpeedA);
-    analogWrite(BmotorR_PIN, 0);
-  } else if (SpeedA == 0) {
-    SpeedA = 0;
-    analogWrite(AmotorL_PIN, 0);
-    analogWrite(AmotorR_PIN, 0);
-  }
+  int pwmA = SpeedA;
+  int pwmB = SpeedB;
+  int pwmC = SpeedC;
+  int pwmD = SpeedD;
 
+  // -------- motor A ------------
+  if (pwmA > 0) {
+    analogWrite(AmotorL_PIN, pwmA);
+    analogWrite(AmotorR_PIN, 0);
+  } else {
+    analogWrite(AmotorL_PIN, 0);
+    analogWrite(AmotorR_PIN, abs(pwmA));
+  }
 
   // -------- motor B ------------
-  if (SpeedB > 0) {
-    analogWrite(BmotorL_PIN, SpeedB);
+  if (pwmB > 0) {
+    analogWrite(BmotorL_PIN, pwmB);
     analogWrite(BmotorR_PIN, 0);
-  }
-
-  else if (SpeedB < 0) {
-    SpeedB *= -1;
+  } else {
     analogWrite(BmotorL_PIN, 0);
-    analogWrite(BmotorR_PIN, SpeedB);
-  } else if (SpeedB == 0) {
-    SpeedB = 0;
-    analogWrite(BmotorL_PIN, 0);
-    analogWrite(BmotorR_PIN, 0);
+    analogWrite(BmotorR_PIN, abs(pwmB));
   }
-
 
   // -------- motor C ------------
-  if (SpeedC > 0) {
-    analogWrite(CmotorL_PIN, 0);
-    analogWrite(CmotorR_PIN, SpeedC);
-  }
-
-  else if (SpeedC < 0) {
-    SpeedC *= -1;
-    analogWrite(CmotorL_PIN, SpeedC);
+  if (pwmC > 0) {
+    analogWrite(CmotorL_PIN, pwmC);
     analogWrite(CmotorR_PIN, 0);
-  } else if (SpeedC == 0) {
-    SpeedC = 0;
+  } else {
     analogWrite(CmotorL_PIN, 0);
-    analogWrite(CmotorR_PIN, 0);
+    analogWrite(CmotorR_PIN, abs(pwmC));
   }
-
 
   // -------- motor D ------------
-  if (SpeedD > 0) {
-    analogWrite(DmotorL_PIN, SpeedD);
+  if (pwmD > 0) {
+    analogWrite(DmotorL_PIN, pwmD);  
     analogWrite(DmotorR_PIN, 0);
-  }
-
-  else if (SpeedD < 0) {
-    SpeedD *= -1;
+  } else {
     analogWrite(DmotorL_PIN, 0);
-    analogWrite(DmotorR_PIN, SpeedD);
-  } else if (SpeedD == 0) {
-    SpeedD = 0;
-    analogWrite(DmotorL_PIN, 0);
-    analogWrite(DmotorR_PIN, 0);
+    analogWrite(DmotorR_PIN, abs(pwmD));
   }
 }
 
 // ======================= Arm Function ====================== //
 void controlArm() {
-    static bool holding = false;
-    static int last_target = 0;
-    const int min_error = 5;
-    const float Kp = 0.8; // Pake proportional ajaa
+  static bool holding = false;
+  static int last_target = 0;
+  const int min_error = 5;
+  const float Kp = 0.8;  // Pake proportional ajaa
 
-    if (arm_target_position != last_target) {
-        holding = true;
-        last_target = arm_target_position;
+  if (arm_target_position != last_target) {
+    holding = true;
+    last_target = arm_target_position;
+  }
+
+  if (holding) {
+    int error = arm_target_position - encoderarm_count;
+
+    // Cek jika sudah sampai di target
+    if (abs(error) < min_error) {
+      analogWrite(ARM_FORWARD_PIN, 0);
+      analogWrite(ARM_BACKWARD_PIN, 0);
+      holding = false;  // berhenti
+      return;
     }
+    // Menghitung PWM
+    int pwm = Kp * error;
+    pwm = constrain(pwm, -255, 255);
+    analogWrite(ARM_FORWARD_PIN, pwm > 0 ? pwm : 0);
+    analogWrite(ARM_BACKWARD_PIN, pwm < 0 ? -pwm : 0);
 
-    if (holding) {
-        int error = arm_target_position - encoderarm_count;
-
-        // Cek jika sudah sampai di target
-        if (abs(error) < min_error) {
-            analogWrite(ARM_FORWARD_PIN, 0);
-            analogWrite(ARM_BACKWARD_PIN, 0);
-            holding = false; // berhenti
-            return;
-        }
-        // Menghitung PWM
-        int pwm = Kp * error;
-        pwm = constrain(pwm, -255, 255);
-        analogWrite(ARM_FORWARD_PIN, pwm > 0 ? pwm : 0);
-        analogWrite(ARM_BACKWARD_PIN, pwm < 0 ? -pwm : 0);
-
-    } else {
-        // motor mati jika tidak dalam mode holding
-        analogWrite(ARM_FORWARD_PIN, 0);
-        analogWrite(ARM_BACKWARD_PIN, 0);
-    }
+  } else {
+    // motor mati jika tidak dalam mode holding
+    analogWrite(ARM_FORWARD_PIN, 0);
+    analogWrite(ARM_BACKWARD_PIN, 0);
+  }
 }

@@ -31,6 +31,22 @@ void LF_Read() {
   MUX_Select(7);
   delayMicroseconds(20);
   LF_Vertikal[7] = analogRead(MUX_INPUT);
+
+  MUX_Select(8);
+  delayMicroseconds(20);
+  LF_Vertikal[8] = analogRead(MUX_INPUT);
+
+  MUX_Select(9);
+  delayMicroseconds(20);
+  LF_Vertikal[9] = analogRead(MUX_INPUT);
+
+  MUX_Select(10);
+  delayMicroseconds(20);
+  LF_Vertikal[10] = analogRead(MUX_INPUT);
+
+  MUX_Select(11);
+  delayMicroseconds(20);
+  LF_Vertikal[11] = analogRead(MUX_INPUT);
 }
 
 float LF_WeightedAverage() {
@@ -38,7 +54,7 @@ float LF_WeightedAverage() {
   int TotalActiveSensor = 0;
   LF_Read();
   // reset values
-  for(int i = 0; i<= 6; i++) {
+  for (int i = 0; i <= 6; i++) {
     LF_Vertikal_Dig[i] = 0;
   }
 
@@ -109,12 +125,20 @@ void Debug_LF_Vertikal() {
   Serial.print(LF_Vertikal[6]);
   Serial.print(" ");
   Serial.print(LF_Vertikal[7]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[8]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[9]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[10]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[11]);
   Serial.print("  | Output : ");
   Serial.println(WA);
 }
 
 void HomeToConveyor() {
-  if (pos_y >= 0 && pos_y <= 500) {
+  if (pos_y >= 0 && pos_y <= 200) {
     x = 0;
     y = 150;
     z = 0;
@@ -133,9 +157,10 @@ void Lidar_Read() {
 void Debug_Lidar() {
   Lidar_Read();
 
+  Serial.print("Lidar 1 : ");
   Serial.print(readLidar[0]);
-  Serial.print(" ");
+  Serial.print("  Lidar 2 :");
   Serial.print(readLidar[1]);
-
-  Serial.println(" ");
+  Serial.print("  compass :");
+  Serial.println(heading);
 }

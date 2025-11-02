@@ -14,11 +14,11 @@ void ISR_encoder4() {
 
 // ============== Interrupt Encoder Arm ======================
 void ISR_encoderARM() {
-    if (digitalRead(ARM_ENCODER_A_PIN) == digitalRead(ARM_ENCODER_B_PIN)) {
-        encoderarm_count--;
-    } else {
-        encoderarm_count++;
-    }
+  if (digitalRead(ARM_ENCODER_A_PIN) == digitalRead(ARM_ENCODER_B_PIN)) {
+    encoderarm_count--;
+  } else {
+    encoderarm_count++;
+  }
 }
 
 // ============== Interrupt Rotary Encoder ==================
@@ -50,6 +50,7 @@ void updateoverflow() {
   rpmC = (encoder3RPM * 60 * 10) / 134;
   rpmD = (encoder4RPM * 60 * 10) / 134;
 
+  newPID();
   // pid(); kalau mau PIDnya setiap 10 Hz, harus di bagi interval di function PIDnya
 
   // Serial.print(rpmA);
@@ -61,5 +62,3 @@ void updateoverflow() {
   // Serial.print(rpmD);
   // Serial.println();
 }
-
-

@@ -15,7 +15,7 @@ Command commands[] = {
   { "?", handle_query },
   { "GO", handle_compass },
   { "RES",handle_reset },
-  {"KNTL", handle_kntl},
+  {"R", handle_kntl},
 };
 
 void process_command(char *command) {
@@ -108,10 +108,10 @@ void handle_suction(char *args) {
 
   if (suction_state) {
     digitalWrite(SUCTION_PIN, HIGH);
-    Serial.println("Suction turned ON");
+    Serial.println("1");
   } else {
     digitalWrite(SUCTION_PIN, LOW);
-    Serial.println("Suction turned OFF");
+    Serial.println("0");
   }
 }
 
@@ -213,5 +213,5 @@ void handle_reset(char *args) {
 }
 
 void handle_kntl(char *args) {
-  kntl = !kntl;
+  robotState = 1;
 }

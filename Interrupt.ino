@@ -50,7 +50,7 @@ void updateoverflow() {
   rpmC = (encoder3RPM * 60 * 10) / 134;
   rpmD = (encoder4RPM * 60 * 10) / 134;
 
-  newPID();
+  pid();
   // pid(); kalau mau PIDnya setiap 10 Hz, harus di bagi interval di function PIDnya
 
   // Serial.print(rpmA);

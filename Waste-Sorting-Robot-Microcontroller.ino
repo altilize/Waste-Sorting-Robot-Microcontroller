@@ -47,10 +47,10 @@ String command;
 
 // #define EMERGENCY PC12
 // ============== Encoder Motor ==============
-#define BmotorENC_PIN PA5  // PD12 ubah ke PA5
-#define AmotorENC_PIN PC6
-#define CmotorENC_PIN PC4  // PD13 ubah ke PC4
-#define DmotorENC_PIN PC7
+#define AmotorENC_PIN PA5  // PD12 ubah ke PA5
+#define BmotorENC_PIN PC6
+#define DmotorENC_PIN PC4  // PD13 ubah ke PC4
+#define CmotorENC_PIN PC7
 volatile int encoderMotor1 = 0, encoderMotor2 = 0, encoderMotor3 = 0, encoderMotor4 = 0;
 volatile int encoder1RPM = 0, encoder2RPM = 0, encoder3RPM = 0, encoder4RPM = 0;
 
@@ -102,8 +102,8 @@ void MUX_Select(int port) {
   digitalWrite(MUX_Selektor_3, (port >> 3) & 1);
 }
 // ------------- Line Follower ---------------------
-volatile int LF_Vertikal[8];
-volatile int LF_Vertikal_Dig[8];
+volatile int LF_Vertikal[16];
+volatile int LF_Vertikal_Dig[16];
 float weights[] = { 30, 20, 10, 0, -10, -20, -30 };
 bool isLF_ON = true;
 
@@ -122,7 +122,7 @@ double readLidar[2];
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28);
 float heading = 0;
-int robotState = 0;  // 1 = maju, 2 = berputar, 3 = selesai ini buat trial lucu lucuan di mikro
+int robotState = 0;
 float headingOffset = 0.0;
 
 

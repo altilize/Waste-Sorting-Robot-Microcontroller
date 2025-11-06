@@ -8,37 +8,33 @@ void setup() {
 }
 
 void loop() {
-  // ---- Input -----
-  // calculate_position();  // menghitung pos_x dan pos_y
-  // read_compass();
-  // // Lidar_Read();
+  calculate_position();  // menghitung pos_x dan pos_y
+  read_compass();
+  read_command();
+  Lidar_Read();
+
+
+  if (digitalRead(BUTTON) == HIGH) {
+    // reset Motor
+    x = 0;
+    y = 0;
+    z = 0;
+    SpeedA = 0, SpeedB = 0, SpeedC = 0, SpeedD = 0;
+    PID_A = 0, PID_B = 0, PID_C = 0, PID_D = 0;
+    // reset Odometry
+    Odometry1 = 0;
+    Odometry2 = 0;
+    Odometry3 = 0;
+    pos_x = 0.0;
+    pos_y = 0.0;
+  } else {
+    if (robotState != 0) HomeToConveyor();
+  }
+
   // Debug_Lidar();
-  // Serial.print("LS 1 : ");
-  // Serial.print(digitalRead(LimitSwitch_1));
-  // Serial.print("  Odo 2 : ");
-  // Serial.print(digitalRead(LimitSwitch_2));
-  // Serial.print("  Odo 3 : ");
-  // Serial.print(digitalRead(BUTTON));
-  // Serial.println();
-  // digitalWrite(ENABLE_MOTOR_PIN, HIGH);
 
-
-  Serial.print(encoder1RPM);
-  Serial.print(" ");
-  Serial.print(encoder2RPM);
-  Serial.print(" ");
-  Serial.print(encoder3RPM);
-  Serial.print(" ");
-  Serial.println(encoder4RPM);
-  // LF_Read();
-  // Debug_LF_Vertikal();
-
-
-  read_command();  // baca command
   holonomic(x, y, -z);
-
-  // holonomic(x, y, -z);
-  // Serial.println(heading);
+  // 1 = 12 | 2 = 2
 }
 
 
@@ -62,16 +58,6 @@ void loop() {
 
 
 
-// -----------------------
-// 2. Tes Motor A MAJU (Forward) dengan kecepatan 50
-// analogWrite(AmotorL_PIN, 50);    // Beri PWM 50 ke pin Kiri
-// digitalWrite(AmotorR_PIN, LOW);  // Set pin Kanan ke LOW
-// analogWrite(BmotorL_PIN, 50);    // Beri PWM 50 ke pin Kiri
-// digitalWrite(BmotorR_PIN, LOW);  // Set pin Kanan ke LOW
-// analogWrite(CmotorL_PIN, 50);    // Beri PWM 50 ke pin Kiri
-// digitalWrite(CmotorR_PIN, LOW);  // Set pin Kanan ke LOW
-// analogWrite(DmotorL_PIN, 50);    // Beri PWM 50 ke pin Kiri
-// digitalWrite(DmotorR_PIN, LOW);  // Set pin Kanan ke LOW
 // // -------------- nyoba lucu lucuan aj ---------- //
 // if (robotState == 1) {
 

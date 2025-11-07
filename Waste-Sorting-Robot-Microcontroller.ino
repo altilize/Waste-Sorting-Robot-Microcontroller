@@ -121,7 +121,7 @@ double readLidar[2];
 #include <Adafruit_BNO055.h>
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28);
-float heading = 0;
+float heading;
 int robotState = 0;
 float headingOffset = 0.0;
 

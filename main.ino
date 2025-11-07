@@ -10,8 +10,8 @@ void setup() {
 void loop() {
   calculate_position();  // menghitung pos_x dan pos_y
   read_compass();
-  read_command();
   Lidar_Read();
+  read_command();
 
 
   if (digitalRead(BUTTON) == HIGH) {
@@ -31,8 +31,7 @@ void loop() {
     if (robotState != 0) HomeToConveyor();
   }
 
-  // Debug_Lidar();
-
+  // Serial.println(heading);
   holonomic(x, y, -z);
   // 1 = 12 | 2 = 2
 }

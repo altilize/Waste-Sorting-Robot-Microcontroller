@@ -105,9 +105,10 @@ void init_Interrupt() {
 
 void init_Compass() {
   if (!bno.begin()) {
+    // Serial.print("[i] Kompasnya ga kebaca elektrik!");
+    while (1) {
     Serial.print("[i] Kompasnya ga kebaca elektrik!");
-    while (1)
-      ; 
+    }
   }
 
   delay(1000);  // kalau ganggu nanti hapus aja

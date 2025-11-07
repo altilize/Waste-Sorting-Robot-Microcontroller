@@ -178,6 +178,7 @@ void HomeToConveyor() {
   const float KP_DIST = 1.5;            // Gain untuk koreksi jarak (y)
   const float KP_BAL = 0.8;             // Gain untuk koreksi keseimbangan (z)
   const int MAX_CORRECTION_SPEED = 40;  // Batas kecepatan koreksi
+  // Serial.println(heading);
 
   // --- State 1: Maju awal ---
   if (robotState == 1) {
@@ -186,7 +187,7 @@ void HomeToConveyor() {
     z = 0;
     if (pos_y >= 650) {
       robotState = 2;
-      Serial.println("State 1 Selesai. Mulai berputar.");
+      // Serial.println("State 1 Selesai. Mulai berputar.");
     }
 
     // --- State 2: Berputar ke heading target ---
@@ -208,8 +209,8 @@ void HomeToConveyor() {
       pos_x = 0;
       robotState = 3;
 
-      Serial.print("Target heading tercapai di: ");
-      Serial.println(heading);
+      // Serial.print("Target heading tercapai di: ");
+      // Serial.println(heading);
     } else {
       z = KP * error;
       z = constrain(z, -MAX_SPEED, MAX_SPEED);
@@ -224,12 +225,12 @@ void HomeToConveyor() {
       y = 0;
       // // z sudah dihitung di atas
 
-      Serial.print("Menuju target... Heading: ");
-      Serial.print(heading);
-      Serial.print(" | Error: ");
-      Serial.print(error);
-      Serial.print(" | Kecepatan Putar (z): ");
-      Serial.println(z);
+      // Serial.print("Menuju target... Heading: ");
+      Serial.println(heading);
+      // Serial.print(" | Error: ");
+      // Serial.print(error);
+      // Serial.print(" | Kecepatan Putar (z): ");
+      // Serial.println(z);
     }
   } else if (robotState == 3) {
     x = 0;
@@ -239,7 +240,7 @@ void HomeToConveyor() {
     if (readLidar[0] <= TARGET_JARAK || readLidar[1] <= TARGET_JARAK) {
       y = 0;  // Stop maju
       robotState = 4;
-      Serial.println("Objek terdeteksi. Masuk mode penyeimbang (State 4).");
+      // Serial.println("Objek terdeteksi. Masuk mode penyeimbang (State 4).");
     }
 
     // --- State 4: Menyeimbangkan posisi (tegak lurus halangan) ---
@@ -252,11 +253,11 @@ void HomeToConveyor() {
       robotState = 5;  // Sudah seimbang, mulai geser
       pos_x = 0;       // Reset pos_x untuk state selanjutnya
       z = 0;
-      Serial.println("Seimbang! Mulai geser kanan (State 5).");
+      // Serial.println("Seimbang! Mulai geser kanan (State 5).");
     } else {
       // Kontrol proporsional untuk berputar
       z = KP_BAL * diff;
-      z = constrain(z, -60, 60);  
+      z = constrain(z, -60, 60);
     }
 
     // --- State 5 & 6: Geser Kanan/Kiri dengan Penjaga Jarak & Keseimbangan ---
@@ -266,13 +267,13 @@ void HomeToConveyor() {
       x = 100;
       if (pos_x >= 200) {
         robotState = 6;
-        Serial.println("Ujung kanan tercapai. Balik ke kiri (State 6).");
+        // Serial.println("Ujung kanan tercapai. Balik ke kiri (State 6).");
       }
     } else {  // Geser Kiri (State 6)
       x = -100;
       if (pos_x <= 0) {
         robotState = 5;
-        Serial.println("Ujung kiri tercapai. Balik ke kanan (State 5).");
+        // Serial.println("Ujung kiri tercapai. Balik ke kanan (State 5).");
       }
     }
 
@@ -296,8 +297,8 @@ void HomeToConveyor() {
     }
 
     // Batasi kecepatan koreksi agar tidak mengganggu gerak utama X
-    y = constrain(y, -MAX_CORRECTION_SPEED, MAX_CORRECTION_SPEED);
-    z = constrain(z, -MAX_CORRECTION_SPEED, MAX_CORRECTION_SPEED);
+    y = constrain(y, -40, 40);
+    z = constrain(z, -40, 40);
   }
 }
 

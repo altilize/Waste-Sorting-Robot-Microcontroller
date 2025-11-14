@@ -14,8 +14,8 @@ Command commands[] = {
   { "DIG_LF", handle_dig_lf },
   { "?", handle_query },
   { "GO", handle_compass },
-  { "RES",handle_reset },
-  {"R", handle_kntl},
+  { "RES", handle_reset },
+  { "R", handle_kntl },
 };
 
 void process_command(char *command) {
@@ -159,26 +159,25 @@ void handle_dig_lf(char *args) {
   Serial.println();
 }
 
-// -------- Command ? - Debug Everything (not really) -------- //
+// -------- Command ? - Mengirim Data Sensor ke Python -------- //
 void handle_query(char *args) {
-  // Siapkan buffer untuk menampung seluruh string data
-  char data_buffer[100]; 
-
-  // Format seluruh data ke dalam satu string menggunakan sprintf
-  sprintf(data_buffer, "%ld %ld %ld %d %d %d %d %.2f %.2f %.2f",
-          Odometry1,
-          Odometry2,
-          Odometry3,
-          (int)encoder1RPM,
-          (int)encoder2RPM,
-          (int)encoder3RPM,
-          (int)encoder4RPM,
-          pos_x,
-          pos_y,
-          heading);
-
-  // Kirim seluruh string sekali jalan dengan newline di akhir
-  Serial.println(data_buffer);
+  // Ganti sprintf() dengan print manual untuk menghindari masalah float
+  
+  Serial.print("D "); // Awalan
+  
+  Serial.print(pos_x); // Angka 2 berarti 2 angka di belakang koma
+  Serial.print(" ");
+  
+  Serial.print(pos_y);
+  Serial.print(" ");
+  
+  Serial.print(heading);
+  Serial.print(" ");
+  
+  Serial.print(readLidar[0]); // 1 angka di belakang koma
+  Serial.print(" ");
+  
+  Serial.println(readLidar[1]); // Pakai println di akhir
 }
 
 // ------- Command GO - Run Home to Conveyor + print value initial compass ---- //
@@ -213,5 +212,5 @@ void handle_reset(char *args) {
 }
 
 void handle_kntl(char *args) {
-  robotState = 1;
+  // robotState = 1;
 }

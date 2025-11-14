@@ -161,7 +161,7 @@ void Debug_LF_Vertikal() {
   // Serial.print(LF_Vertikal[13]);
   // Serial.print(" ");
   // Serial.print(LF_Vertikal[14]);
-
+  // Serial.println();
 
   // Serial.print("  | Output : ");
   // Serial.println(WA);
@@ -170,9 +170,9 @@ void Debug_LF_Vertikal() {
 // ---------------------- Utama Algoritma ------------------ //
 void HomeToConveyor() {
   // --- Konstanta untuk Kontrol Lidar ---
-  const int TARGET_JARAK = 140;      // Target jarak ke halangan (cm)
-  const int TOLERANSI_SEIMBANG = 3;  // Toleransi beda jarak kiri-kanan (cm)
-  const int TOLERANSI_JARAK = 3;     // Toleransi error jarak maju-mundur (cm)
+  const int TARGET_JARAK = 150;      // Target jarak ke halangan (cm)
+  const int TOLERANSI_SEIMBANG = 5;  // Toleransi beda jarak kiri-kanan (cm)
+  const int TOLERANSI_JARAK = 5;     // Toleransi error jarak maju-mundur (cm)
 
   // Gain untuk menjaga jarak & keseimbangan saat geser
   const float KP_DIST = 1.5;            // Gain untuk koreksi jarak (y)
@@ -185,7 +185,7 @@ void HomeToConveyor() {
     x = 0;
     y = 150;
     z = 0;
-    if (pos_y >= 650) {
+    if (pos_y >= 600) {
       robotState = 2;
       // Serial.println("State 1 Selesai. Mulai berputar.");
     }
@@ -195,7 +195,7 @@ void HomeToConveyor() {
     const float TARGET_HEADING = -88;
     const float KP = 0.7;       // Gain
     const int TOLERANSI = 1;    // Range heading
-    const int MAX_SPEED = 150;  // Z max speed
+    const int MAX_SPEED = 200;  // Z max speed
 
     float error = TARGET_HEADING - heading;
 
@@ -217,8 +217,8 @@ void HomeToConveyor() {
 
       // min speed supaya robot tetap bergerak
       if (abs(z) < 90) {
-        if (z > 0) z = 80;
-        if (z < 0) z = -80;
+        if (z > 0) z = 70;
+        if (z < 0) z = -70;
       }
 
       x = 0;

@@ -107,7 +107,7 @@ void init_Compass() {
   if (!bno.begin()) {
     // Serial.print("[i] Kompasnya ga kebaca elektrik!");
     while (1) {
-    Serial.print("[i] Kompasnya ga kebaca elektrik!");
+    Serial.println("[i] Kompasnya ga kebaca elektrik!");
     }
   }
 

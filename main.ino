@@ -27,15 +27,18 @@ void loop() {
     Odometry3 = 0;
     pos_x = 0.0;
     pos_y = 0.0;
+    digitalWrite(ENABLE_MOTOR_PIN, LOW);
   } else {
     if (robotState != 0) HomeToConveyor();
+    holonomic(x, y, -z);
   }
-
+  
+  // Debug_LF_Vertikal();
+  // Serial.println(RE);
+  // Debug_Lidar();
   // Serial.println(heading);
-  holonomic(x, y, -z);
-  // 1 = 12 | 2 = 2
-}
 
+}
 
 
 

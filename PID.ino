@@ -9,7 +9,7 @@ float previousIA = 0, previousErrorA = 0;
 
 // Variabel PID Motor B
 float KpB = 0.100,
-      KiB = 0.002,
+      KiB = 0.00002,
       KdB = 0.00002;
 float maxIntegralB = 1000.0; // BATAS MAKSIMUM UNTUK IB (Perlu Tuning)
 float errorB = 0, PIDvalueB = 0;

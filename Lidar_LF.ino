@@ -1,64 +1,60 @@
 // ======================== LINE FOLLOWER ======================
 void LF_Read() {
   MUX_Select(0);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[0] = analogRead(MUX_INPUT);
 
   MUX_Select(1);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[1] = analogRead(MUX_INPUT);
 
   MUX_Select(2);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[2] = analogRead(MUX_INPUT);
 
   MUX_Select(3);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[3] = analogRead(MUX_INPUT);
 
   MUX_Select(4);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[4] = analogRead(MUX_INPUT);
 
   MUX_Select(5);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[5] = analogRead(MUX_INPUT);
 
   MUX_Select(6);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[6] = analogRead(MUX_INPUT);
 
   MUX_Select(7);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[7] = analogRead(MUX_INPUT);
 
   MUX_Select(8);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[8] = analogRead(MUX_INPUT);
 
   MUX_Select(9);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[9] = analogRead(MUX_INPUT);
 
   MUX_Select(10);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[10] = analogRead(MUX_INPUT);
 
   MUX_Select(11);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[11] = analogRead(MUX_INPUT);
 
   MUX_Select(12);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[12] = analogRead(MUX_INPUT);
 
   MUX_Select(13);
-  delayMicroseconds(100);
+  delayMicroseconds(50);
   LF_Vertikal[13] = analogRead(MUX_INPUT);
-
-  MUX_Select(14);
-  delayMicroseconds(100);
-  LF_Vertikal[14] = analogRead(MUX_INPUT);
 }
 
 float LF_WeightedAverage() {
@@ -120,9 +116,9 @@ float LF_WeightedAverage() {
 
 //  ============== Debugging Line Follower ================ //
 void Debug_LF_Vertikal() {
-  float WA = LF_WeightedAverage();
-
-  for (int i = 0; i < 15; i++) {
+  // float WA = LF_WeightedAverage();
+  LF_Read();
+  for (int i = 0; i < 14; i++) {
     if (LF_Vertikal[i] >= 400) {
       LF_Vertikal_Dig[i] = 1;
     } else {
@@ -131,37 +127,35 @@ void Debug_LF_Vertikal() {
     Serial.print(LF_Vertikal_Dig[i]);
     Serial.print("  ");
   }
+  Serial.print("  ----  ");
+  Serial.print(LF_Vertikal[0]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[1]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[2]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[3]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[4]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[5]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[6]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[7]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[8]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[9]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[10]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[11]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[12]);
+  Serial.print(" ");
+  Serial.print(LF_Vertikal[13]);
   Serial.println();
-  // Serial.print(LF_Vertikal[0]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[1]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[2]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[3]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[4]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[5]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[6]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[7]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[8]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[9]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[10]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[11]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[12]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[13]);
-  // Serial.print(" ");
-  // Serial.print(LF_Vertikal[14]);
-  // Serial.println();
 
   // Serial.print("  | Output : ");
   // Serial.println(WA);

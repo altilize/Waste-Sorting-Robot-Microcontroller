@@ -8,7 +8,17 @@ void initial_setup() {
   init_Lidar();
   init_Timer();
   init_Compass();
-  init_limitSwitch(); // baru nih
+  init_limitSwitch();  // baru nih
+  init_LF();
+}
+
+void init_LF() {
+  pinMode(MUX_Selektor_0, OUTPUT);
+  pinMode(MUX_Selektor_1, OUTPUT);
+  pinMode(MUX_Selektor_2, OUTPUT);
+  pinMode(MUX_Selektor_3, OUTPUT);
+
+  pinMode(MUX_INPUT, INPUT);
 }
 
 void init_limitSwitch() {
@@ -107,7 +117,7 @@ void init_Compass() {
   if (!bno.begin()) {
     // Serial.print("[i] Kompasnya ga kebaca elektrik!");
     while (1) {
-    Serial.println("[i] Kompasnya ga kebaca elektrik!");
+      Serial.println("[i] Kompasnya ga kebaca elektrik!");
     }
   }
 

@@ -10,6 +10,15 @@ void initial_setup() {
   init_Compass();
   init_limitSwitch();  // baru nih
   init_LF();
+  init_LS();
+}
+
+void init_LS() {
+  pinMode(LS_PIN_A, OUTPUT);
+  pinMode(LS_PIN_B, OUTPUT);
+  
+  pinMode(LS_ENC_A, INPUT_PULLUP);
+  pinMode(LS_ENC_B, INPUT_PULLUP);
 }
 
 void init_LF() {
@@ -18,7 +27,7 @@ void init_LF() {
   pinMode(MUX_Selektor_2, OUTPUT);
   pinMode(MUX_Selektor_3, OUTPUT);
 
-  pinMode(MUX_INPUT, INPUT);
+  pinMode(MUX_INPUT, INPUT_PULLDOWN);
 }
 
 void init_limitSwitch() {
@@ -111,6 +120,7 @@ void init_Interrupt() {
   attachInterrupt(digitalPinToInterrupt(ODOMETRY_PIN_3A), encC, RISING);
 
   attachInterrupt(digitalPinToInterrupt(ARM_ENCODER_A_PIN), ISR_encoderARM, RISING);
+  attachInterrupt(digitalPinToInterrupt(LS_ENC_A), handle_ls_encoder, RISING);
 }
 
 void init_Compass() {

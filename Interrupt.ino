@@ -12,12 +12,20 @@ void ISR_encoder4() {
   encoderMotor4++;
 }
 
-// ============== Interrupt Encoder Arm ======================
+// ============== Interrupt Encoder Arm and Leadscrew ======================
 void ISR_encoderARM() {
   if (digitalRead(ARM_ENCODER_A_PIN) == digitalRead(ARM_ENCODER_B_PIN)) {
     encoderarm_count--;
   } else {
     encoderarm_count++;
+  }
+}
+
+void handle_ls_encoder() {
+  if (digitalRead(LS_ENC_A) == digitalRead(LS_ENC_B)) {
+    ls_current_pos++;
+  } else {
+    ls_current_pos--;
   }
 }
 
@@ -31,6 +39,7 @@ void encB() {
 void encC() {
   (digitalRead(ODOMETRY_PIN_3A) == digitalRead(ODOMETRY_PIN_3B)) ? Odometry3++ : Odometry3--;
 }
+
 
 
 // ============= Interrupt Timer  ============================

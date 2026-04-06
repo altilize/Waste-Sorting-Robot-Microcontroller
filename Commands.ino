@@ -15,7 +15,9 @@ Command commands[] = {
   { "?", handle_query },
   { "GO", handle_compass },
   { "RES", handle_reset },
-  { "R", handle_kntl },
+  { "L", handle_leadscrew_cmd },   // Command baru untuk Leadscrew
+  { "RLS", handle_reset_ls_enc },  // Reset encoder leadscrew
+
 };
 
 void process_command(char *command) {
@@ -53,6 +55,27 @@ void handle_arm(char *args) {
     Serial.println("Invalid command format. Use: A (position)");
   }
 }
+
+// Command: "L <posisi_target>" (Contoh: L 5000)
+// Command: "L 0" (Kembali ke Home/Bawah)
+void handle_leadscrew_cmd(char *args) {
+  if (args != NULL) {
+    ls_target_pos = atol(args);  // Convert string ke long
+    ls_active = true;            // Aktifkan loop kontrol
+    Serial.print("Leadscrew Target Set: ");
+    Serial.println(ls_target_pos);
+  }
+}
+
+// Command Tambahan: Reset Encoder (Jika manual kalibrasi saat start)
+void handle_reset_ls_enc(char *args) {
+  ls_current_pos = 0;
+  ls_target_pos = 0;
+  set_leadscrew_motor(0);
+  ls_active = false;
+  Serial.println("Leadscrew Encoder Reset to 0");
+}
+
 
 // ---------- Command AH - Arm Home ------------ /
 void handle_home_arm(char *args) {
@@ -160,24 +183,30 @@ void handle_dig_lf(char *args) {
 }
 
 // -------- Command ? - Mengirim Data Sensor ke Python -------- //
+// -------- Command ? - Mengirim Data Sensor ke Python -------- //
 void handle_query(char *args) {
-  // Ganti sprintf() dengan print manual untuk menghindari masalah float
-  
-  Serial.print("D "); // Awalan
-  
-  Serial.print(pos_x); // Angka 2 berarti 2 angka di belakang koma
+  Serial.print("D ");  // Awalan
+
+  Serial.print(pos_x);
   Serial.print(" ");
-  
+
   Serial.print(pos_y);
   Serial.print(" ");
-  
+
   Serial.print(heading);
   Serial.print(" ");
-  
-  Serial.print(readLidar[0]); // 1 angka di belakang koma
+
+  Serial.print(readLidar[0]);
   Serial.print(" ");
-  
-  Serial.println(readLidar[1]); // Pakai println di akhir
+
+  Serial.print(readLidar[1]);
+  Serial.print(" ");  // PENTING: Jangan lupa spasi di sini
+
+  Serial.print(ls_current_pos);  // Data Leadscrew
+  Serial.print(" ");             // PENTING: Spasi pemisah sebelum data terakhir
+
+  // PERBAIKAN DI SINI: Gunakan 'encoderarm_count'
+  Serial.println(encoderarm_count);
 }
 
 // ------- Command GO - Run Home to Conveyor + print value initial compass ---- //

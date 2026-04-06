@@ -71,6 +71,23 @@ float SpeedA = 0, SpeedB = 0, SpeedC = 0, SpeedD = 0;
 volatile int Odometry1 = 0, Odometry2 = 0, Odometry3 = 0;
 int pos_x, pos_y;  // BELUM
 
+// =================== Leadscrew =============== //
+#define LS_PIN_A PE9   // Motor Driver IN1
+#define LS_PIN_B PE11  // Motor Driver IN2
+#define LS_ENC_A PC9   // Encoder Phase A
+#define LS_ENC_B PA15  // Encoder Phase B
+
+// --- Variabel Kontrol Leadscrew ---
+volatile long ls_current_pos = 0;  // Posisi saat ini (dari encoder)
+long ls_target_pos = 0;            // Posisi yang dituju
+bool ls_active = false;            // Status apakah sedang bergerak
+int ls_speed_pwm = 100;            // Kecepatan motor (0-255)
+int ls_tolerance = 10;             // Toleransi error posisi (deadband)
+
+// Tuning PID Sederhana (Hanya P)
+float kp_leadscrew = 1;
+
+
 // ============= Arm ========================= //
 #define ARM_FORWARD_PIN PA10
 #define ARM_BACKWARD_PIN PE14
@@ -124,6 +141,8 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28);
 float heading;
 int robotState = 0;
 float headingOffset = 0.0;
+
+
 
 
 // ==================== Limit Switch =======================

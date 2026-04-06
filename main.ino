@@ -29,8 +29,10 @@ void loop() {
     pos_y = 0.0;
     digitalWrite(ENABLE_MOTOR_PIN, LOW);
   } else {
-    if (robotState != 0) HomeToConveyor();
+    // if (robotState != 0) HomeToConveyor();
     holonomic(x, y, -z);
+    update_leadscrew();
+    controlArm();
   }
   
   // Debug_LF_Vertikal();

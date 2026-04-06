@@ -82,35 +82,84 @@ void motorauto() {
 
 // ======================= Arm Function ====================== //
 void controlArm() {
-  static bool holding = false;
-  static int last_target = 0;
-  const int min_error = 5;
-  const float Kp = 0.8;  // Pake proportional ajaa
+  const int min_error = 5;     // Toleransi error encoder
+  const float Kp = 0.8;        // Konstanta Proporsional
+  
+  // Hitung Error
+  int error = arm_target_position - encoderarm_count;
 
-  if (arm_target_position != last_target) {
-    holding = true;
-    last_target = arm_target_position;
-  }
-
-  if (holding) {
-    int error = arm_target_position - encoderarm_count;
-
-    // Cek jika sudah sampai di target
-    if (abs(error) < min_error) {
-      analogWrite(ARM_FORWARD_PIN, 0);
-      analogWrite(ARM_BACKWARD_PIN, 0);
-      holding = false;  // berhenti
-      return;
-    }
-    // Menghitung PWM
-    int pwm = Kp * error;
-    pwm = constrain(pwm, -255, 255);
-    analogWrite(ARM_FORWARD_PIN, pwm > 0 ? pwm : 0);
-    analogWrite(ARM_BACKWARD_PIN, pwm < 0 ? -pwm : 0);
-
-  } else {
-    // motor mati jika tidak dalam mode holding
+  // Deadband: Jika error sangat kecil, matikan motor (supaya tidak berdengung/oscillate)
+  if (abs(error) < min_error) {
     analogWrite(ARM_FORWARD_PIN, 0);
     analogWrite(ARM_BACKWARD_PIN, 0);
+    return; // Keluar fungsi, hemat komputasi
   }
+
+  // Hitung PWM Proporsional
+  int pwm = Kp * error;
+
+  // Batasi PWM (Clamping)
+  pwm = constrain(pwm, -255, 255);
+  
+  // Tambahan: Minimum Power (agar motor tidak stuck saat PWM kecil tapi belum sampai)
+  // Misal motor butuh minimal PWM 40 untuk mulai bergerak
+  if (pwm > 0 && pwm < 40) pwm = 40;
+  if (pwm < 0 && pwm > -40) pwm = -40;
+
+  // Eksekusi ke Motor Driver
+  if (pwm > 0) {
+    analogWrite(ARM_FORWARD_PIN, pwm);
+    analogWrite(ARM_BACKWARD_PIN, 0);
+  } else {
+    analogWrite(ARM_FORWARD_PIN, 0);
+    analogWrite(ARM_BACKWARD_PIN, abs(pwm));
+  }
+}
+
+
+
+// ======================= Leadscrew Function ================== //
+void set_leadscrew_motor(int speed) {
+  // Speed range: -255 (Full Down) sampai 255 (Full Up)
+  if (speed > 0) {
+    // Gerak Naik (Sesuaikan logika HIGH/LOW jika terbalik)
+    analogWrite(LS_PIN_A, speed);
+    analogWrite(LS_PIN_B, 0);
+  } else if (speed < 0) {
+    // Gerak Turun
+    analogWrite(LS_PIN_A, 0);
+    analogWrite(LS_PIN_B, -speed); // Jadikan positif untuk PWM
+  } else {
+    // Stop / Rem
+    analogWrite(LS_PIN_A, 255); // High-High = Brake (tergantung driver)
+    analogWrite(LS_PIN_B, 255); // Atau gunakan 0, 0 untuk coasting
+  }
+}
+
+void update_leadscrew() {
+  if (!ls_active) return; // Jangan lakukan apa-apa jika tidak diperintahkan
+
+  long error = ls_target_pos - ls_current_pos;
+
+  // Jika sudah dalam batas toleransi, berhenti
+  if (abs(error) <= ls_tolerance) {
+    set_leadscrew_motor(0);
+    ls_active = false;
+    Serial.println("Leadscrew: Target Reached");
+    return;
+  }
+
+  // Kontrol Proporsional (P-Controller)
+  // Semakin jauh target, semakin cepat. Semakin dekat, melambat.
+  int speed = error * kp_leadscrew;
+
+  // Batasi kecepatan (Clamping) agar tidak melebihi kemampuan PWM & Motor
+  if (speed > 255) speed = 255;
+  if (speed < -255) speed = -255;
+  
+  // Pastikan ada tenaga minimum agar motor tidak berdengung (Deadzone motor)
+  if (speed > 0 && speed < 60) speed = 60;
+  if (speed < 0 && speed > -60) speed = -60;
+
+  set_leadscrew_motor(speed);
 }

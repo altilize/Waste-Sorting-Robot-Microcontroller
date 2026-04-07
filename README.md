@@ -21,7 +21,7 @@ Sistem ini merupakan **firmware mikrokontroler** untuk robot pemilah sampah berb
 │                    ARSITEKTUR SISTEM                            │
 │                                                                 │
 │   ┌─────────────┐     USB Serial      ┌──────────────────┐     │
-│   │ Raspberry Pi │ ◄═══════════════► │   STM32F407VETx  │     │
+│   │   Laptop     │ ◄═══════════════► │   STM32F407VETx  │     │
 │   │  (High-Level │    115200 baud      │  (Low-Level      │     │
 │   │   Controller)│                     │   Controller)    │     │
 │   └─────────────┘                     └────────┬─────────┘     │
